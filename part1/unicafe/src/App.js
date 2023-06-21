@@ -40,9 +40,17 @@ const Statistic = ({ good, neutral, bad }) => {
 	const all = good + neutral + bad;
 	const avg = (good - bad) / all;
 	const positive = (good / all) * 100;
+	if (all === 0) {
+		return (
+			<>
+				<h1>statistics</h1>
+				<p>No feedback given</p>
+			</>
+		);
+	}
 	return (
 		<>
-			<h1>statistic</h1>
+			<h1>statistics</h1>
 			<div>
 				<p>good {good}</p>
 				<p>neutral {neutral}</p>
