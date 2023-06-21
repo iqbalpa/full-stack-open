@@ -7,8 +7,19 @@ const App = () => {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
-		const newPersons = persons.concat({ name: newName });
-		setPersons(newPersons);
+		let isExist = false;
+		persons.forEach((person) => {
+			console.log(person);
+			if (person.name === newName) {
+				isExist = true;
+			}
+		});
+
+		if (isExist) alert(`${newName} is already added to phonebook`);
+		else {
+			const newPersons = persons.concat({ name: newName });
+			setPersons(newPersons);
+		}
 	};
 	const handleChange = (e) => {
 		setNewName(e.target.value);
