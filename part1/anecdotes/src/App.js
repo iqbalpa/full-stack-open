@@ -23,6 +23,7 @@ const App = () => {
 		6: 0,
 		7: 0,
 	});
+	const [mostVoted, setMostVoted] = useState(0);
 
 	const handleClickNext = () => {
 		const rand = Math.round(Math.random() * 8);
@@ -33,15 +34,33 @@ const App = () => {
 		const copy = { ...votes };
 		copy[selected] += 1;
 		setVotes(copy);
+		getMostVoted();
+	};
+	const getMostVoted = () => {
+		let max = -999;
+		for (const key of Object.keys(votes)) {
+			if (votes[key] >= max) {
+				max = votes[key];
+				setMostVoted(key);
+			}
+		}
 	};
 
 	return (
 		<div>
-			<div>{anecdotes[selected]}</div>
-			<p>has {votes[selected]} votes</p>
 			<div>
-				<button onClick={handleClickVote}>vote</button>
-				<button onClick={handleClickNext}>next anecdote</button>
+				<h1>Anecdote of the day</h1>
+				<div>{anecdotes[selected]}</div>
+				<p>has {votes[selected]} votes</p>
+				<div>
+					<button onClick={handleClickVote}>vote</button>
+					<button onClick={handleClickNext}>next anecdote</button>
+				</div>
+			</div>
+			<div>
+				<h1>Anecdote with most votes</h1>
+				<div>{anecdotes[mostVoted]}</div>
+				<p>has {votes[mostVoted]} votes</p>
 			</div>
 		</div>
 	);
