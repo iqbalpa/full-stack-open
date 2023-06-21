@@ -43,9 +43,10 @@ const Header = ({ name }) => {
 const Content = ({ parts }) => {
 	return (
 		<div>
-			<Part part={parts[0].name} exercise={parts[0].exercises} />
-			<Part part={parts[1].name} exercise={parts[1].exercises} />
-			<Part part={parts[2].name} exercise={parts[2].exercises} />
+			{parts.map((part) => (
+				<Part key={part.id} part={part.name} exercise={part.exercises} />
+			))}
+			<SumExercises parts={parts} />
 		</div>
 	);
 };
@@ -55,6 +56,15 @@ const Part = ({ part, exercise }) => {
 			<p>
 				{part} {exercise}
 			</p>
+		</>
+	);
+};
+const SumExercises = ({ parts }) => {
+	let sum = 0;
+	parts.map((part) => (sum += part.exercises));
+	return (
+		<>
+			<p>total of {sum} exercise</p>
 		</>
 	);
 };
