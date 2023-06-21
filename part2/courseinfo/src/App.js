@@ -60,11 +60,12 @@ const Part = ({ part, exercise }) => {
 	);
 };
 const SumExercises = ({ parts }) => {
-	let sum = 0;
-	parts.map((part) => (sum += part.exercises));
+	const total = parts.reduce((sum, part) => {
+		return sum + part.exercises;
+	}, 0);
 	return (
 		<>
-			<p>total of {sum} exercise</p>
+			<p>total of {total} exercise</p>
 		</>
 	);
 };
