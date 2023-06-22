@@ -52,6 +52,10 @@ const App = () => {
 					console.log("success");
 					setPersons(persons.concat(res.data));
 					setNotifMessage(`Added ${res.data.name}`);
+
+					setTimeout(() => {
+						setNotifMessage(null);
+					}, 2000);
 				})
 				.catch((err) => {
 					alert("failed to add new person");
