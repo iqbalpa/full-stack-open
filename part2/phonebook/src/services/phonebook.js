@@ -6,5 +6,8 @@ const getAll = () => {
 const addContact = (person) => {
 	return axios.post("http://localhost:3001/persons", person);
 };
+const deleteContact = (id) => {
+	return axios.delete(`http://localhost:3001/persons/${id}`);
+};
 
-export default { getAll, addContact };
+export default { getAll, addContact, deleteContact };

@@ -46,6 +46,19 @@ const App = () => {
 	const handleChangeFilter = (e) => {
 		setFilter(e.target.value.toLocaleLowerCase());
 	};
+	const handleDeleteContact = (name, id) => {
+		if (window.confirm(`delete ${name}`)) {
+			phoneService
+				.deleteContact(id)
+				.then((res) => {
+					console.log("success delete");
+					phoneService.getAll().then((res) => setPersons(res.data));
+				})
+				.catch((err) => {
+					console.log("failed to delete");
+				});
+		}
+	};
 
 	const personsToShow = persons.filter((person) => person.name.toLocaleLowerCase().includes(filter));
 
@@ -58,7 +71,7 @@ const App = () => {
 			<PersonForm handleSubmit={handleSubmit} handleChangeName={handleChangeName} handleChangeNumber={handleChangeNumber} />
 
 			<h2>Numbers</h2>
-			<Persons persons={personsToShow} />
+			<Persons persons={personsToShow} handleDeleteContact={handleDeleteContact} />
 		</div>
 	);
 };
