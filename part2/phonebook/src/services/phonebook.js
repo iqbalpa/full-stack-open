@@ -9,5 +9,8 @@ const addContact = (person) => {
 const deleteContact = (id) => {
 	return axios.delete(`http://localhost:3001/persons/${id}`);
 };
+const updateContact = (id, person) => {
+	return axios.put(`http://localhost:3001/persons/${id}`, person);
+};
 
-export default { getAll, addContact, deleteContact };
+export default { getAll, addContact, deleteContact, updateContact };

@@ -11,20 +11,37 @@ const App = () => {
 	const [filter, setFilter] = useState("");
 
 	useEffect(() => {
-		phoneService.getAll().then((res) => setPersons(res.data));
+		phoneService.getAll().then((res) => {
+			setPersons(res.data);
+		});
 	}, []);
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		let isExist = false;
+		let updatedPerson = {};
+
 		persons.forEach((person) => {
 			console.log(person);
 			if (person.name === newName) {
 				isExist = true;
+				updatedPerson = { ...person, number: newNumber };
 			}
 		});
-		if (isExist) alert(`${newName} is already added to phonebook`);
-		else {
+
+		if (isExist) {
+			if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+				phoneService
+					.updateContact(updatedPerson.id, updatedPerson)
+					.then((res) => {
+						console.log(res);
+						phoneService.getAll().then((res) => setPersons(res.data));
+					})
+					.catch((err) => {
+						console.log("failed to update");
+					});
+			}
+		} else {
 			const person = { name: newName, number: newNumber };
 			phoneService
 				.addContact(person)
@@ -44,7 +61,7 @@ const App = () => {
 		setNewNumber(e.target.value);
 	};
 	const handleChangeFilter = (e) => {
-		setFilter(e.target.value.toLocaleLowerCase());
+		setFilter(e.target.value.toLowerCase());
 	};
 	const handleDeleteContact = (name, id) => {
 		if (window.confirm(`delete ${name}`)) {
@@ -59,8 +76,7 @@ const App = () => {
 				});
 		}
 	};
-
-	const personsToShow = persons.filter((person) => person.name.toLocaleLowerCase().includes(filter));
+	const personsToShow = persons.filter((person) => person.name.toLowerCase().includes(filter));
 
 	return (
 		<div>
