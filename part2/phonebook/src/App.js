@@ -12,6 +12,7 @@ const App = () => {
 	const [newNumber, setNewNumber] = useState("");
 	const [filter, setFilter] = useState("");
 	const [notifMessage, setNotifMessage] = useState(null);
+	const [error, setError] = useState(false);
 
 	useEffect(() => {
 		phoneService.getAll().then((res) => {
@@ -42,6 +43,13 @@ const App = () => {
 					})
 					.catch((err) => {
 						console.log("failed to update");
+						setError(true);
+						setNotifMessage(`Information of${newName} has already been removed from server`);
+
+						setTimeout(() => {
+							setError(false);
+							setNotifMessage(null);
+						}, 3000);
 					});
 			}
 		} else {
@@ -89,7 +97,7 @@ const App = () => {
 	return (
 		<div>
 			<h2>Phonebook</h2>
-			<Notification message={notifMessage} />
+			<Notification message={notifMessage} error={error} />
 			<Filter handleChangeFilter={handleChangeFilter} />
 
 			<h3>add a new</h3>
