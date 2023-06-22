@@ -2,13 +2,16 @@ import { useEffect, useState } from "react";
 import PersonForm from "./components/PersonForm";
 import Filter from "./components/Filter";
 import Persons from "./components/Persons";
+import Notification from "./components/Notification";
 import phoneService from "./services/phonebook";
+import "./index.css";
 
 const App = () => {
 	const [persons, setPersons] = useState([]);
 	const [newName, setNewName] = useState("");
 	const [newNumber, setNewNumber] = useState("");
 	const [filter, setFilter] = useState("");
+	const [notifMessage, setNotifMessage] = useState(null);
 
 	useEffect(() => {
 		phoneService.getAll().then((res) => {
@@ -48,6 +51,7 @@ const App = () => {
 				.then((res) => {
 					console.log("success");
 					setPersons(persons.concat(res.data));
+					setNotifMessage(`Added ${res.data.name}`);
 				})
 				.catch((err) => {
 					alert("failed to add new person");
@@ -81,6 +85,7 @@ const App = () => {
 	return (
 		<div>
 			<h2>Phonebook</h2>
+			<Notification message={notifMessage} />
 			<Filter handleChangeFilter={handleChangeFilter} />
 
 			<h3>add a new</h3>
