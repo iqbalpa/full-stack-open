@@ -54,10 +54,19 @@ app.delete("/api/persons/:id", (req, res) => {
 
 app.post("/api/persons", (req, res) => {
 	const body = req.body;
+	const name = body.name;
+	const number = body.number;
+	if (!name || !number) {
+		return res.status(204).json({ error: "field missing" });
+	}
 	const id = Math.round(Math.random() * 10000);
 
-	const person = { id, ...body };
+	const isExist = data.filter((p) => p.name === name);
+	if (isExist.length === 1) {
+		return res.status(204).json({ error: "name must be unique" });
+	}
 
+	const person = { id, ...body };
 	res.json(person);
 });
 
