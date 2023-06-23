@@ -28,6 +28,17 @@ app.get("/api/persons", (req, res) => {
 	res.json(data);
 });
 
+app.get("/api/persons/:id", (req, res) => {
+	const id = Number(req.params.id);
+	const person = data[id - 1];
+
+	if (person) {
+		res.json(person);
+	} else {
+		res.status(204).send("Content missing").end();
+	}
+});
+
 app.get("/api/info", (req, res) => {
 	const date = new Date();
 	const options = {
