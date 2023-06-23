@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
 
+app.use(express.json());
+
 const data = [
 	{
 		id: 1,
@@ -48,6 +50,15 @@ app.delete("/api/persons/:id", (req, res) => {
 	} else {
 		res.status(204).send("Failed to delete").end();
 	}
+});
+
+app.post("/api/persons", (req, res) => {
+	const body = req.body;
+	const id = Math.round(Math.random() * 10000);
+
+	const person = { id, ...body };
+
+	res.json(person);
 });
 
 app.get("/api/info", (req, res) => {
