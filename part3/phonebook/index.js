@@ -1,13 +1,15 @@
 const express = require("express");
 const morgan = require("morgan");
-const cors = require('cors')
+const cors = require("cors");
 const app = express();
+const mongoose = require("mongoose");
+const Phonebook = require("./models/phonebook");
 
 morgan.token("body", function (req, res) {
 	return JSON.stringify(req.body);
 });
 
-app.use(cors())
+app.use(cors());
 app.use(express.json());
 app.use(morgan(":method :url :status :res[content-length] - :response-time ms :body"));
 
@@ -35,29 +37,23 @@ const data = [
 ];
 
 app.get("/api/persons", (req, res) => {
-	res.json(data);
+	Phonebook.find({}).then((contacts) => {
+		res.json(contacts);
+	});
 });
 
 app.get("/api/persons/:id", (req, res) => {
-	const id = Number(req.params.id);
-	const person = data[id - 1];
-
-	if (person) {
-		res.json(person);
-	} else {
-		res.status(204).send("Content missing").end();
-	}
+	const id = req.params.id;
+	const person = Phonebook.findById(id).then((contact) => {
+		res.json(contact);
+	});
 });
 
 app.delete("/api/persons/:id", (req, res) => {
-	const id = Number(req.params.id);
-	const temp = data.filter((p) => p.id !== id);
-
-	if (temp.length !== data.length) {
-		res.status(200).send("Delete success");
-	} else {
-		res.status(204).send("Failed to delete").end();
-	}
+	const id = req.params.id;
+	Phonebook.findByIdAndRemove(id).then((contact) => {
+		res.json({ message: "delete success" });
+	});
 });
 
 app.post("/api/persons", (req, res) => {
@@ -67,15 +63,13 @@ app.post("/api/persons", (req, res) => {
 	if (!name || !number) {
 		return res.status(204).json({ error: "field missing" });
 	}
-	const id = Math.round(Math.random() * 10000);
-
-	const isExist = data.filter((p) => p.name === name);
-	if (isExist.length === 1) {
-		return res.status(204).json({ error: "name must be unique" });
-	}
-
-	const person = { id, ...body };
-	res.json(person);
+	const person = new Phonebook({
+		name: name,
+		number: number,
+	});
+	person.save().then(() => {
+		res.json(person);
+	});
 });
 
 app.get("/api/info", (req, res) => {
