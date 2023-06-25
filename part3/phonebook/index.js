@@ -2,7 +2,6 @@ const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 const app = express();
-const mongoose = require("mongoose");
 const Phonebook = require("./models/phonebook");
 
 morgan.token("body", function (req, res) {
@@ -13,50 +12,27 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan(":method :url :status :res[content-length] - :response-time ms :body"));
 
-const data = [
-	{
-		id: 1,
-		name: "Arto Hellas",
-		number: "040-123456",
-	},
-	{
-		id: 2,
-		name: "Ada Lovelace",
-		number: "39-44-5323523",
-	},
-	{
-		id: 3,
-		name: "Dan Abramov",
-		number: "12-43-234345",
-	},
-	{
-		id: 4,
-		name: "Mary Poppendieck",
-		number: "39-23-6423122",
-	},
-];
-
-app.get("/api/persons", (req, res) => {
-	Phonebook.find({}).then((contacts) => {
-		res.json(contacts);
-	});
+app.get("/api/persons", (req, res, next) => {
+	Phonebook.find({})
+		.then((contacts) => res.json(contacts))
+		.catch((err) => next(err));
 });
 
-app.get("/api/persons/:id", (req, res) => {
+app.get("/api/persons/:id", (req, res, next) => {
 	const id = req.params.id;
-	const person = Phonebook.findById(id).then((contact) => {
-		res.json(contact);
-	});
+	Phonebook.findById(id)
+		.then((contact) => res.json(contact))
+		.catch((err) => next(err));
 });
 
-app.delete("/api/persons/:id", (req, res) => {
+app.delete("/api/persons/:id", (req, res, next) => {
 	const id = req.params.id;
-	Phonebook.findByIdAndRemove(id).then((contact) => {
-		res.json({ message: "delete success" });
-	});
+	Phonebook.findByIdAndRemove(id)
+		.then((contact) => res.json({ message: "delete success" }))
+		.catch((err) => next(err));
 });
 
-app.post("/api/persons", (req, res) => {
+app.post("/api/persons", (req, res, next) => {
 	const body = req.body;
 	const name = body.name;
 	const number = body.number;
@@ -67,9 +43,10 @@ app.post("/api/persons", (req, res) => {
 		name: name,
 		number: number,
 	});
-	person.save().then(() => {
-		res.json(person);
-	});
+	person
+		.save()
+		.then(() => res.json(person))
+		.catch((err) => next(err));
 });
 
 app.get("/api/info", (req, res) => {
@@ -91,6 +68,15 @@ app.get("/api/info", (req, res) => {
     <p>${formattedDate}</p>
     `);
 });
+
+const errorHandler = (error, req, res, next) => {
+	console.log(error.message);
+	if (error.name === "CastError") {
+		return res.status(204).send({ error: "malformatted id" });
+	}
+	next(error);
+};
+app.use(errorHandler);
 
 const PORT = 3001;
 app.listen(PORT, () => {
