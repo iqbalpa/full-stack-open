@@ -49,6 +49,14 @@ app.post("/api/persons", (req, res, next) => {
 		.catch((err) => next(err));
 });
 
+app.put("/api/persons", (req, res, next) => {
+	const name = req.body.name;
+	const number = req.body.number;
+	Phonebook.updateOne({ name: name }, { name: name, number: number }, { new: true })
+		.then((updated) => res.json(updated))
+		.catch((err) => next(err));
+});
+
 app.get("/api/info", (req, res) => {
 	const date = new Date();
 	const options = {
