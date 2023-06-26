@@ -8,3 +8,4 @@ This repository contains my submissions for the [Full Stack Open](https://fullst
 -   part 1: Introduction to React
 -   part 2: Communicating with server
 -   part 3: Programming a server with NodeJS and Express
+-   part 4: Testing Express servers, user administration
