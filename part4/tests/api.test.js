@@ -26,3 +26,7 @@ test("all blogs are returned", async () => {
 	const response = await api.get("/api/blogs");
 	expect(response.body).toHaveLength(helper.initialBlogs.length);
 });
+test("blog has id attribute", async () => {
+	const response = await api.get("/api/blogs");
+	expect(response.body[0].id).toBeDefined();
+});
