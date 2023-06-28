@@ -43,6 +43,8 @@ test("valid blog can be added", async () => {
 
 	const response = await api.get("/api/blogs");
 	expect(response.body).toHaveLength(helper.initialBlogs.length + 1);
+    const titles = response.body.map(blog => blog.title)
+    expect(titles).toContain("five")
 }, 25000);
 test("if likes property is missing from the request, the default is 0", async () => {
 	const newBlog = new Blog({
