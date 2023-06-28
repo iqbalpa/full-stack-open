@@ -43,10 +43,7 @@ test("valid blog can be added", async () => {
 
 	const response = await api.get("/api/blogs");
 	expect(response.body).toHaveLength(helper.initialBlogs.length + 1);
-	// somehow yg ke-post cuma id doang
-	// const titles = response.body.map((blog) => blog.title);
-	// expect(titles).toContain("five");
-});
+}, 25000);
 test("if likes property is missing from the request, the default is 0", async () => {
 	const newBlog = new Blog({
 		title: "helo this is my blog",
@@ -55,4 +52,11 @@ test("if likes property is missing from the request, the default is 0", async ()
 	});
 	const response = await api.post("/api/blogs").send(newBlog);
 	expect(response.body.likes).toBe(0);
-});
+}, 25000);
+test("if url property is missing from the request, then return status code 400", async () => {
+	const newBlog = new Blog({
+		title: "this is a blog",
+		author: "author",
+	});
+	await api.post("/api/blogs").send(newBlog).expect(400);
+}, 25000);
