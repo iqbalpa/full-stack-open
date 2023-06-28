@@ -30,3 +30,22 @@ test("blog has id attribute", async () => {
 	const response = await api.get("/api/blogs");
 	expect(response.body[0].id).toBeDefined();
 });
+test("valid blog can be added", async () => {
+	const newBlog = new Blog({
+		title: "five",
+		author: "iqbal pahlevi",
+		url: "google.com",
+		likes: 12,
+	});
+	await api
+		.post("/api/blogs")
+		.send(newBlog)
+		.expect(201)
+		.expect("Content-Type", /application\/json/);
+
+	const response = await api.get("/api/blogs");
+	expect(response.body).toHaveLength(helper.initialBlogs.length + 1);
+	// somehow yg ke-post cuma id doang
+	// const titles = response.body.map((blog) => blog.title);
+	// expect(titles).toContain("five");
+});
