@@ -15,13 +15,6 @@ const initialBlogs = [
 		url: "youtube.com",
 		likes: 1,
 	},
-	{
-		id: "abc123efi",
-		title: "three",
-		author: "amin",
-		url: "twitter.com",
-		likes: 5,
-	},
 ];
 
 module.exports = { initialBlogs };

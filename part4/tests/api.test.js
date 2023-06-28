@@ -12,9 +12,7 @@ beforeEach(async () => {
 	await blog.save();
 	blog = new Blog(helper.initialBlogs[1]);
 	await blog.save();
-	blog = new Blog(helper.initialBlogs[2]);
-	await blog.save();
-});
+}, 100000);
 
 test("blogs returned as json", async () => {
 	await api
@@ -48,4 +46,13 @@ test("valid blog can be added", async () => {
 	// somehow yg ke-post cuma id doang
 	// const titles = response.body.map((blog) => blog.title);
 	// expect(titles).toContain("five");
+});
+test("if likes property is missing from the request, the default is 0", async () => {
+	const newBlog = new Blog({
+		title: "helo this is my blog",
+		author: "tom hanks",
+		url: "medium.com",
+	});
+	const response = await api.post("/api/blogs").send(newBlog);
+	expect(response.body.likes).toBe(0);
 });
