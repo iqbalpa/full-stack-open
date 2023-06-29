@@ -43,8 +43,8 @@ test("valid blog can be added", async () => {
 
 	const response = await api.get("/api/blogs");
 	expect(response.body).toHaveLength(helper.initialBlogs.length + 1);
-    const titles = response.body.map(blog => blog.title)
-    expect(titles).toContain("five")
+	const titles = response.body.map((blog) => blog.title);
+	expect(titles).toContain("five");
 }, 25000);
 test("if likes property is missing from the request, the default is 0", async () => {
 	const newBlog = new Blog({
@@ -62,3 +62,14 @@ test("if url property is missing from the request, then return status code 400",
 	});
 	await api.post("/api/blogs").send(newBlog).expect(400);
 }, 25000);
+test("if blog is found, then delete success", async () => {
+	const response = await api.get("/api/blogs");
+	const id = response.body[0].id;
+	await api.delete(`/api/blogs/${id}`).expect(204);
+});
+test("if blog is found, update success", async () => {
+	const response = await api.get("/api/blogs");
+	const id = response.body[0].id;
+	const newTitle = "this is updated title";
+	await api.patch(`/api/blogs/${id}`).send({ title: newTitle }).expect(200);
+});
