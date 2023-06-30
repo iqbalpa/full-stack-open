@@ -6,6 +6,7 @@ const app = express();
 const logger = require("./utils/logger");
 const config = require("./utils/config");
 const blogRouter = require("./controllers/blogs");
+const loginRouter = require("./controllers/users");
 
 mongoose
 	.connect(config.MONGO_URI)
@@ -16,5 +17,6 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/blogs", blogRouter);
+app.use("/api/users", loginRouter);
 
 module.exports = app;
