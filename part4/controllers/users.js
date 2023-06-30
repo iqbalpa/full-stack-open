@@ -5,9 +5,22 @@ const User = require("../models/user");
 
 loginRouter.post("/signup", async (request, response) => {
 	const { name, username, password } = request.body;
+	if (!(username && password)) {
+		return response.status(401).json({ error: "username and password cannot be emptied" });
+	}
+	if (password.length < 3) {
+		return response.status(401).json({ error: "password length minimal is 3" });
+	}
+	const isUserExist = (await User.findOne({ username })) ? true : false;
+	if (isUserExist) {
+		return response.status(401).json({ error: "username already exist" });
+	}
+
 	const passwordHash = await bcrypt.hash(password, 10);
 	const user = new User({ name, username, passwordHash });
-	await user.save();
+	console.log(user);
+	const result = await user.save();
+	console.log(result);
 	response.status(201).send("user created");
 });
 
