@@ -3,14 +3,6 @@ const Blog = require("../models/blog");
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 
-const getTokenFrom = (request) => {
-	const authorization = request.get("authorization");
-	if (authorization && authorization.startsWith("Bearer ")) {
-		return authorization.replace("Bearer ", "");
-	}
-	return null;
-};
-
 blogRouter.get("/", async (request, response) => {
 	const blogs = await Blog.find({}).populate("user", { name: 1, username: 1, id: 1 });
 	response.json(blogs);
@@ -21,8 +13,7 @@ blogRouter.post("/", async (request, response) => {
 		response.status(400).end();
 		return;
 	}
-	const decodedToken = jwt.verify(request.token, process.env.SECRET);
-	const user = await User.findById(decodedToken.id);
+	const user = request.user;
 
 	const blog = new Blog({
 		likes: 0,
@@ -46,8 +37,7 @@ blogRouter.get("/:id", async (request, response) => {
 
 blogRouter.delete("/:id", async (request, response) => {
 	const id = request.params.id;
-	const decodedToken = jwt.verify(request.token, process.env.SECRET);
-	const user = await User.findById(decodedToken.id);
+	const user = request.user;
 	const blog = await Blog.findById(id);
 	if (blog.user[0].id === user.id) {
 		await Blog.findByIdAndRemove(id);
