@@ -18,9 +18,7 @@ loginRouter.post("/signup", async (request, response) => {
 
 	const passwordHash = await bcrypt.hash(password, 10);
 	const user = new User({ name, username, passwordHash });
-	console.log(user);
 	const result = await user.save();
-	console.log(result);
 	response.status(201).send("user created");
 });
 
@@ -43,8 +41,8 @@ loginRouter.post("/login", async (request, response) => {
 });
 
 loginRouter.get("/", async (request, response) => {
-	const users = await User.find({});
-	const result = users.map((user) => ({ user: user.username, name: user.name, id: user.id }));
+	const users = await User.find({}).populate("blogs", { url: 1, id: 1, likes: 1, title: 1 });
+	const result = users.map((user) => ({ user: user.username, name: user.name, id: user.id, blogs: user.blogs }));
 	response.status(200).json(result);
 });
 
