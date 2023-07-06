@@ -21,10 +21,10 @@ blogRouter.post("/", async (request, response) => {
 		response.status(400).end();
 		return;
 	}
-	const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET);
-	if (!decodedToken.id) {
-		return response.status(401).json({ error: "token invalid" });
-	}
+	const decodedToken = jwt.verify(request.token, process.env.SECRET);
+	// if (!decodedToken.id) {
+	// 	return response.status(401).json({ error: "token invalid" });
+	// }
 	const user = await User.findById(decodedToken.id);
 
 	const blog = new Blog({
