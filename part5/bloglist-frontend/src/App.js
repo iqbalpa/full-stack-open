@@ -5,7 +5,7 @@ import authService from "./services/auth";
 
 const App = () => {
 	const [blogs, setBlogs] = useState([]);
-	const [user, setUser] = useState(null);
+	const [user, setUser] = useState(window.localStorage.getItem("user"));
 	const [username, setUsername] = useState("");
 	const [pass, setPass] = useState("");
 	const [errorMessage, setErrorMessage] = useState(null);
@@ -23,6 +23,7 @@ const App = () => {
 			setUser(user);
 			setUsername("");
 			setPass("");
+			window.localStorage("user", JSON.stringify(user));
 		} catch (e) {
 			console.log("failed to login");
 			setErrorMessage("wrong credentials");
@@ -30,6 +31,11 @@ const App = () => {
 				setErrorMessage(null);
 			}, 5000);
 		}
+	};
+
+	const handleLogout = () => {
+		setUser(null);
+		window.localStorage.removeItem("user");
 	};
 
 	return (
@@ -51,7 +57,10 @@ const App = () => {
 			{user && (
 				<div>
 					<h2>blogs</h2>
-					<p>{user.name} logged in</p>
+					<p>
+						{user.name} logged in
+						<button onClick={handleLogout}>logout</button>
+					</p>
 					{blogs.map((blog) => (
 						<Blog key={blog.id} blog={blog} />
 					))}
