@@ -12,6 +12,8 @@ const App = () => {
 	const [title, setTitle] = useState("");
 	const [author, setAuthor] = useState("");
 	const [url, setUrl] = useState("");
+	const [addBlogNotif, setAddBlogNotif] = useState(false);
+	const [isLoginFailed, setIsLoginFailed] = useState(false);
 
 	useEffect(() => {
 		if (!user) return;
@@ -28,10 +30,12 @@ const App = () => {
 			setPass("");
 			window.localStorage("user", JSON.stringify(user));
 		} catch (e) {
+			setIsLoginFailed(true);
 			console.log("failed to login");
 			setErrorMessage("wrong credentials");
 			setTimeout(() => {
 				setErrorMessage(null);
+				setIsLoginFailed(false);
 			}, 5000);
 		}
 	};
@@ -45,9 +49,13 @@ const App = () => {
 		event.preventDefault();
 
 		await blogService.addBlog(user.token, title, author, url);
-		setTitle("");
-		setAuthor("");
-		setUrl("");
+		setAddBlogNotif(true);
+		setTimeout(() => {
+			setAddBlogNotif(false);
+			setTitle("");
+			setAuthor("");
+			setUrl("");
+		}, 3000);
 	};
 
 	return (
@@ -55,6 +63,7 @@ const App = () => {
 			{!user && (
 				<form onSubmit={handleLogin}>
 					<h2>log in to application</h2>
+					{isLoginFailed && <h3 style={{ color: "red" }}>wrong username or password</h3>}
 					<p>
 						username
 						<input type="text" value={username} name="username" onChange={({ target }) => setUsername(target.value)} />
@@ -69,6 +78,11 @@ const App = () => {
 			{user && (
 				<div>
 					<h2>blogs</h2>
+					{addBlogNotif && (
+						<h3 style={{ color: "green" }}>
+							a new blog {title} by {author} added
+						</h3>
+					)}
 					<p>
 						{user.name} logged in
 						<button onClick={handleLogout}>logout</button>
