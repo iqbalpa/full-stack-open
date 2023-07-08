@@ -11,10 +11,6 @@ const App = () => {
 	const [username, setUsername] = useState("");
 	const [pass, setPass] = useState("");
 	const [errorMessage, setErrorMessage] = useState(null);
-	const [title, setTitle] = useState("");
-	const [author, setAuthor] = useState("");
-	const [url, setUrl] = useState("");
-	const [addBlogNotif, setAddBlogNotif] = useState(false);
 	const [isLoginFailed, setIsLoginFailed] = useState(false);
 
 	useEffect(() => {
@@ -47,21 +43,8 @@ const App = () => {
 		window.localStorage.removeItem("user");
 	};
 
-	const handleTitleChange = (e) => setTitle(e.target.value);
-	const handleAuthorChange = (e) => setAuthor(e.target.value);
-	const handleUrlChange = (e) => setUrl(e.target.value);
-
-	const handleCreateBlog = async (event) => {
-		event.preventDefault();
-
-		await blogService.addBlog(user.token, title, author, url);
-		setAddBlogNotif(true);
-		setTimeout(() => {
-			setAddBlogNotif(false);
-			setTitle("");
-			setAuthor("");
-			setUrl("");
-		}, 3000);
+	const handleCreateBlog = async (blog) => {
+		await blogService.addBlog({ token: user.token, ...blog });
 	};
 
 	return (
@@ -94,38 +77,13 @@ const App = () => {
 			{user && (
 				<div>
 					<h2>blogs</h2>
-					{addBlogNotif && (
-						<h3 style={{ color: "green" }}>
-							a new blog {title} by {author} added
-						</h3>
-					)}
 					<p>
 						{user.name} logged in
 						<button onClick={handleLogout}>logout</button>
 					</p>
 					<Togglable buttonLabel="create blog">
-						<CreateBlogForm
-							handleCreateBlog={handleCreateBlog}
-							handleTitleChange={handleTitleChange}
-							handleAuthorChange={handleAuthorChange}
-							handleUrlChange={handleUrlChange}
-							title={title}
-							author={author}
-							url={url}
-						/>
+						<CreateBlogForm handleCreateBlog={handleCreateBlog} />
 					</Togglable>
-					{/* <form onSubmit={handleCreateBlog}>
-						<p>
-							title: <input type="text" value={title} onChange={handleTitleChange} />
-						</p>
-						<p>
-							author: <input type="text" value={author} onChange={handleAuthorChange} />
-						</p>
-						<p>
-							url: <input type="text" value={url} onChange={handleUrlChange} />
-						</p>
-						<button type="submit">create</button>
-					</form> */}
 					{blogs.map((blog) => (
 						<Blog key={blog.id} blog={blog} />
 					))}

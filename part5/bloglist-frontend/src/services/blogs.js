@@ -9,13 +9,13 @@ const getAll = (token) => {
 	});
 	return request.then((response) => response.data);
 };
-const addBlog = (token, title, author, url) => {
+const addBlog = (newBlog) => {
 	const request = axios.post(
 		baseUrl,
-		{ title, author, url },
+		{ title: newBlog.title, author: newBlog.author, url: newBlog.url },
 		{
 			headers: {
-				Authorization: `Bearer ${token}`,
+				Authorization: `Bearer ${newBlog.token}`,
 			},
 		}
 	);
