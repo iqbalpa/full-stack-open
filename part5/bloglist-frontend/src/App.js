@@ -11,12 +11,13 @@ const App = () => {
 	const [username, setUsername] = useState("");
 	const [pass, setPass] = useState("");
 	const [errorMessage, setErrorMessage] = useState(null);
+	const [succeedMessage, setSucceedMessage] = useState(null);
 	const [isLoginFailed, setIsLoginFailed] = useState(false);
 
 	useEffect(() => {
 		if (!user) return;
 		blogService.getAll(user.token).then((blogs) => setBlogs(blogs));
-	}, [user]);
+	}, [user, succeedMessage]);
 
 	const handleLogin = async (event) => {
 		event.preventDefault();
@@ -45,6 +46,10 @@ const App = () => {
 
 	const handleCreateBlog = async (blog) => {
 		await blogService.addBlog({ token: user.token, ...blog });
+		setSucceedMessage("succeed to create a new blog");
+		setTimeout(() => {
+			setSucceedMessage(null);
+		}, 3000);
 	};
 
 	return (
