@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import Blog from "./components/Blog";
 import blogService from "./services/blogs";
 import authService from "./services/auth";
+import CreateBlogForm from "./components/CreateBlogForm";
+import Togglable from "./components/Togglable";
 
 const App = () => {
 	const [blogs, setBlogs] = useState([]);
@@ -45,6 +47,10 @@ const App = () => {
 		window.localStorage.removeItem("user");
 	};
 
+	const handleTitleChange = (e) => setTitle(e.target.value);
+	const handleAuthorChange = (e) => setAuthor(e.target.value);
+	const handleUrlChange = (e) => setUrl(e.target.value);
+
 	const handleCreateBlog = async (event) => {
 		event.preventDefault();
 
@@ -66,11 +72,21 @@ const App = () => {
 					{isLoginFailed && <h3 style={{ color: "red" }}>wrong username or password</h3>}
 					<p>
 						username
-						<input type="text" value={username} name="username" onChange={({ target }) => setUsername(target.value)} />
+						<input
+							type="text"
+							value={username}
+							name="username"
+							onChange={({ target }) => setUsername(target.value)}
+						/>
 					</p>
 					<p>
 						password
-						<input type="password" value={pass} name="password" onChange={({ target }) => setPass(target.value)} />
+						<input
+							type="password"
+							value={pass}
+							name="password"
+							onChange={({ target }) => setPass(target.value)}
+						/>
 					</p>
 					<button type="submit">login</button>
 				</form>
@@ -87,19 +103,29 @@ const App = () => {
 						{user.name} logged in
 						<button onClick={handleLogout}>logout</button>
 					</p>
-					<h2>create new</h2>
-					<form onSubmit={handleCreateBlog}>
+					<Togglable buttonLabel="create blog">
+						<CreateBlogForm
+							handleCreateBlog={handleCreateBlog}
+							handleTitleChange={handleTitleChange}
+							handleAuthorChange={handleAuthorChange}
+							handleUrlChange={handleUrlChange}
+							title={title}
+							author={author}
+							url={url}
+						/>
+					</Togglable>
+					{/* <form onSubmit={handleCreateBlog}>
 						<p>
-							title: <input type="text" value={title} onChange={({ target }) => setTitle(target.value)} />
+							title: <input type="text" value={title} onChange={handleTitleChange} />
 						</p>
 						<p>
-							author: <input type="text" value={author} onChange={({ target }) => setAuthor(target.value)} />
+							author: <input type="text" value={author} onChange={handleAuthorChange} />
 						</p>
 						<p>
-							url: <input type="text" value={url} onChange={({ target }) => setUrl(target.value)} />
+							url: <input type="text" value={url} onChange={handleUrlChange} />
 						</p>
 						<button type="submit">create</button>
-					</form>
+					</form> */}
 					{blogs.map((blog) => (
 						<Blog key={blog.id} blog={blog} />
 					))}
