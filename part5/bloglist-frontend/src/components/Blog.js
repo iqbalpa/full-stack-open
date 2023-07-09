@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+import blogService from "../services/blogs";
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, user }) => {
 	const [showDetail, setShowDetail] = useState(false);
 
 	const hideWhenShowDetail = { display: showDetail ? "none" : "" };
@@ -15,6 +16,11 @@ const Blog = ({ blog }) => {
 		border: "solid",
 		borderWidth: 1,
 		marginBottom: 5,
+	};
+
+	const handleLike = async (e) => {
+		const id = e.target.id;
+		await blogService.updateLike(id, user);
 	};
 
 	return (
@@ -33,7 +39,10 @@ const Blog = ({ blog }) => {
 					</p>
 					<p>{blog.url}</p>
 					<p>
-						likes {blog.likes} <button>like</button>
+						likes {blog.likes}{" "}
+						<button id={blog.id} onClick={handleLike}>
+							like
+						</button>
 					</p>
 					<p>{blog.author}</p>
 				</div>

@@ -22,5 +22,16 @@ const addBlog = (newBlog) => {
 	return request.then((response) => response.data);
 };
 
+const updateLike = async (id, user) => {
+	const blog = await axios.get(`${baseUrl}/${id}`, { headers: { Authorization: `Bearer ${user.token}` } });
+	const like = blog.data.likes;
+	const request = await axios.patch(
+		`${baseUrl}/${id}`,
+		{ likes: like + 1 },
+		{ headers: { Authorization: `Bearer ${user.token}` } }
+	);
+	return request.data;
+};
+
 // eslint-disable-next-line import/no-anonymous-default-export
-export default { getAll, addBlog };
+export default { getAll, addBlog, updateLike };
