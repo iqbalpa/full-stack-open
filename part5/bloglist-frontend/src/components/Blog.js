@@ -23,6 +23,13 @@ const Blog = ({ blog, user }) => {
 		await blogService.updateLike(id, user);
 	};
 
+	const handleDelete = async (e) => {
+		const id = e.target.id;
+		if (window.confirm(`remove blog ${blog.title} by ${blog.author}`)) {
+			await blogService.deleteBlog(id, user);
+		}
+	};
+
 	return (
 		<div>
 			<div style={hideWhenShowDetail}>
@@ -45,6 +52,9 @@ const Blog = ({ blog, user }) => {
 						</button>
 					</p>
 					<p>{blog.author}</p>
+					<button style={{ backgroundColor: "blue" }} id={blog.id} onClick={handleDelete}>
+						remove
+					</button>
 				</div>
 			</div>
 		</div>
