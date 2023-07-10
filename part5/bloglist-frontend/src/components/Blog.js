@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, forwardRef } from "react";
 import blogService from "../services/blogs";
+import PropTypes from "prop-types";
 
-const Blog = ({ blog, user }) => {
+const Blog = forwardRef(({ blog, user }, ref) => {
 	const [showDetail, setShowDetail] = useState(false);
 
 	const hideWhenShowDetail = { display: showDetail ? "none" : "" };
@@ -59,6 +60,11 @@ const Blog = ({ blog, user }) => {
 			</div>
 		</div>
 	);
+});
+
+Blog.propTypes = {
+	blog: PropTypes.object.isRequired,
+	user: PropTypes.object.isRequired,
 };
 
 export default Blog;

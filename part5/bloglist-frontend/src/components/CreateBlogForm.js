@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, forwardRef } from "react";
+import PropTypes from "prop-types";
 
-const CreateBlogForm = ({ handleCreateBlog }) => {
+const CreateBlogForm = forwardRef(({ handleCreateBlog }, ref) => {
 	const [title, setTitle] = useState("");
 	const [author, setAuthor] = useState("");
 	const [url, setUrl] = useState("");
@@ -43,6 +44,10 @@ const CreateBlogForm = ({ handleCreateBlog }) => {
 			</form>
 		</>
 	);
+});
+
+CreateBlogForm.propTypes = {
+	handleCreateBlog: PropTypes.func.isRequired,
 };
 
 export default CreateBlogForm;
