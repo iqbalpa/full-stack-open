@@ -46,7 +46,7 @@ const Blog = forwardRef(({ blog, user }, ref) => {
 						<button onClick={toggle}>hide</button>
 					</p>
 					<p>{blog.url}</p>
-					<p>
+					<p id="like">
 						likes {blog.likes}{" "}
 						<button id={blog.id} onClick={handleLike}>
 							like
