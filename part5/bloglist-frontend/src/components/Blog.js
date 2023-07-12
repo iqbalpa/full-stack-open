@@ -2,7 +2,7 @@ import React, { useState, forwardRef } from "react";
 import blogService from "../services/blogs";
 import PropTypes from "prop-types";
 
-const Blog = forwardRef(({ blog, user }, ref) => {
+const Blog = forwardRef(({ blog, user}, ref) => {
 	const [showDetail, setShowDetail] = useState(false);
 
 	const hideWhenShowDetail = { display: showDetail ? "none" : "" };
@@ -48,7 +48,7 @@ const Blog = forwardRef(({ blog, user }, ref) => {
 					<p>{blog.url}</p>
 					<p id="like">
 						likes {blog.likes}{" "}
-						<button id={blog.id} onClick={handleLike}>
+						<button className="likeButton" id={blog.id} onClick={handleLike} >
 							like
 						</button>
 					</p>
