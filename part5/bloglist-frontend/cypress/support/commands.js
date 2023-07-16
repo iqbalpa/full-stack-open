@@ -32,3 +32,18 @@ Cypress.Commands.add("createBlog", ({ title, author, url }) => {
 	cy.get("#createButton").click({ force: true });
 	cy.contains("added");
 });
+Cypress.Commands.add("newBlog", ({ title, author, url, likes }) => {
+	cy.request({
+		method: "POST",
+		url: "http://localhost:3003/api/blogs",
+		headers: {
+			Authorization: `Bearer ${JSON.parse(localStorage.getItem("loggedInUser")).token}`,
+		},
+		body: {
+			title: title,
+			author: author,
+			url: url,
+			likes: likes,
+		},
+	});
+});

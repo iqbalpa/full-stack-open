@@ -78,7 +78,9 @@ const App = () => {
 							onChange={({ target }) => setPass(target.value)}
 						/>
 					</p>
-					<button id="loginButton" type="submit">login</button>
+					<button id="loginButton" type="submit">
+						login
+					</button>
 				</form>
 			)}
 			{user && (
@@ -91,11 +93,13 @@ const App = () => {
 					<Togglable buttonLabel="create blog">
 						<CreateBlogForm handleCreateBlog={handleCreateBlog} />
 					</Togglable>
-					{blogs
-						.sort((a, b) => b.likes - a.likes)
-						.map((blog) => (
-							<Blog user={user} key={blog.id} blog={blog} />
-						))}
+					<div className="blog">
+						{blogs
+							.sort((a, b) => b.likes - a.likes)
+							.map((blog) => (
+								<Blog user={user} key={blog.id} blog={blog} />
+							))}
+					</div>
 				</div>
 			)}
 		</>
