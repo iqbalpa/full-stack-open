@@ -33,4 +33,22 @@ describe("Blog app", function () {
 			cy.contains("wrong username or password");
 		});
 	});
+
+	describe("When logged in", function () {
+		beforeEach(function () {
+			cy.get("#username").type("iqbalpa", { force: true });
+			cy.get("#password").type("helo", { force: true });
+			cy.get("#loginButton").click({ force: true });
+		});
+
+		it.only("A blog can be created", function () {
+			cy.get("#clickToShow").click({ force: true });
+
+			cy.get("#title").type("blog 1", { force: true });
+			cy.get("#author").type("lebron", { force: true });
+			cy.get("#url").type("google.com", { force: true });
+			cy.get("#createButton").click({ force: true });
+			cy.contains("added");
+		});
+	});
 });
