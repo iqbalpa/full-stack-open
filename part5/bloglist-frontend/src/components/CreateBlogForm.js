@@ -32,13 +32,13 @@ const CreateBlogForm = forwardRef(({ handleCreateBlog }, ref) => {
 			)}
 			<form onSubmit={createBlog}>
 				<p>
-					title: <input type="text" value={title} onChange={handleTitleChange} />
+					title: <input alt="title" type="text" value={title} onChange={handleTitleChange} />
 				</p>
 				<p>
-					author: <input type="text" value={author} onChange={handleAuthorChange} />
+					author: <input alt="author" type="text" value={author} onChange={handleAuthorChange} />
 				</p>
 				<p>
-					url: <input type="text" value={url} onChange={handleUrlChange} />
+					url: <input alt="url" type="text" value={url} onChange={handleUrlChange} />
 				</p>
 				<button type="submit">create</button>
 			</form>
