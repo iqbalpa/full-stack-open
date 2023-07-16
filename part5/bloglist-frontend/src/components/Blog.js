@@ -53,7 +53,7 @@ const Blog = forwardRef(({ blog, user}, ref) => {
 						</button>
 					</p>
 					<p>{blog.author}</p>
-					<button style={{ backgroundColor: "blue" }} id={blog.id} onClick={handleDelete}>
+					<button className="deleteButton" style={{ backgroundColor: "blue" }} id={blog.id} onClick={handleDelete}>
 						remove
 					</button>
 				</div>

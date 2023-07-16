@@ -51,7 +51,7 @@ describe("Blog app", function () {
 			cy.contains("added");
 		});
 
-		it.only("User can like a blog", function () {
+		it("User can like a blog", function () {
 			cy.createBlog({
 				title: "blog 1",
 				author: "lebron james",
@@ -59,6 +59,16 @@ describe("Blog app", function () {
 			});
 			cy.get("#view").click({ force: true });
 			cy.get(".likeButton").should("be.visible");
+		});
+
+		it("user can delete a blog", function () {
+			cy.createBlog({
+				title: "blog 1",
+				author: "lebron james",
+				url: "google.com",
+			});
+			cy.get(".deleteButton").click({ force: true });
+			cy.get("html").should("not.contain", "blog 1");
 		});
 	});
 });
