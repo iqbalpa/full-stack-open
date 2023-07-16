@@ -41,7 +41,7 @@ describe("Blog app", function () {
 			cy.get("#loginButton").click({ force: true });
 		});
 
-		it.only("A blog can be created", function () {
+		it("A blog can be created", function () {
 			cy.get("#clickToShow").click({ force: true });
 
 			cy.get("#title").type("blog 1", { force: true });
@@ -49,6 +49,16 @@ describe("Blog app", function () {
 			cy.get("#url").type("google.com", { force: true });
 			cy.get("#createButton").click({ force: true });
 			cy.contains("added");
+		});
+
+		it.only("User can like a blog", function () {
+			cy.createBlog({
+				title: "blog 1",
+				author: "lebron james",
+				url: "google.com",
+			});
+			cy.get("#view").click({ force: true });
+			cy.get(".likeButton").should("be.visible");
 		});
 	});
 });

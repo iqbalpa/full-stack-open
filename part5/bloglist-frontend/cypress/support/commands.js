@@ -23,3 +23,12 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+Cypress.Commands.add("createBlog", ({ title, author, url }) => {
+	cy.get("#clickToShow").click({ force: true });
+
+	cy.get("#title").type(title, { force: true });
+	cy.get("#author").type(author, { force: true });
+	cy.get("#url").type(url, { force: true });
+	cy.get("#createButton").click({ force: true });
+	cy.contains("added");
+});

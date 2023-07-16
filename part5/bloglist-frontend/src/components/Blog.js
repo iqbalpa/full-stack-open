@@ -36,7 +36,7 @@ const Blog = forwardRef(({ blog, user}, ref) => {
 			<div style={hideWhenShowDetail}>
 				<div style={blogStyle}>
 					{blog.title} {blog.author}
-					<button onClick={toggle}>view</button>
+					<button id="view" onClick={toggle}>view</button>
 				</div>
 			</div>
 			<div style={showWhenShowDetail}>
