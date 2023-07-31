@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { voteAnecdote } from "../reducers/anecdoteReducer";
 
 const AnecdoteList = () => {
-	const anecdotes = useSelector((state) => state);
+	const data = useSelector((state) => state);
 	const dispatch = useDispatch();
 
 	const vote = (id) => {
@@ -12,7 +12,8 @@ const AnecdoteList = () => {
 
 	return (
 		<>
-			{anecdotes
+			{data.anecdotes
+				.filter((anecdote) => anecdote.content.includes(data.filter))
 				.sort((a, b) => b.votes - a.votes)
 				.map((anecdote) => (
 					<div key={anecdote.id}>
